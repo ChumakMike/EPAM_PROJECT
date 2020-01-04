@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces {
     public interface IUnitOfWork : IDisposable {
-
+        IArticleRepository ArticleRepository { get; }
+        IBlogRepository BlogRepository { get; }
+        ICommentRepository CommentRepository { get; }
+        void SaveChanges();
     }
 }
