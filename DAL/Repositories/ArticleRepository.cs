@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DAL.Repositories {
-    public interface IRepository<T> where T : class {
+    public class ArticleRepository {
 
     }
 }
