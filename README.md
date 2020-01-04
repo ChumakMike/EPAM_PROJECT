@@ -1,2 +1,2 @@
 # EPAM_PROJECT
- Project for EPAM / Blog
+ Project for EPAM / Theme : "Blog"
