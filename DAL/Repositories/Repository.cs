@@ -23,12 +23,12 @@ namespace DAL.Repositories {
             return await AppContext.Set<T>().ToListAsync();
         }
 
-        public ValueTask<T> GetById(int id) {
-            return AppContext.Set<T>().FindAsync(id);
+        public T GetById(int id) {
+            return AppContext.Set<T>().Find(id);
         }
 
-        public async void Remove(int id) {
-            T entityToRemove = await GetById(id);
+        public void Remove(int id) {
+            T entityToRemove = GetById(id);
             AppContext.Set<T>().Remove(entityToRemove);
         }
 
