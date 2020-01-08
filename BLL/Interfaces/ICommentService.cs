@@ -9,7 +9,7 @@ namespace BLL.Interfaces {
     public interface ICommentService {
         CommentDTO GetById(int id);
         Task<IEnumerable<CommentDTO>> GetAll();
-        Task Create(CommentDTO entity);
+        void Create(CommentDTO entity);
         void Remove(int id);
         void Update(CommentDTO entity);
         Task<IEnumerable<CommentDTO>> GetAllWithArticle();

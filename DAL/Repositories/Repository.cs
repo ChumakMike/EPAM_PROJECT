@@ -15,8 +15,8 @@ namespace DAL.Repositories {
             this.AppContext = appContext;
         }
 
-        public async Task Create(T entity) {
-            await AppContext.Set<T>().AddAsync(entity);
+        public void Create(T entity) {
+            AppContext.Set<T>().Add(entity);
         }
 
         public async Task<IEnumerable<T>> GetAll() {
@@ -34,7 +34,7 @@ namespace DAL.Repositories {
 
         public void Update(T entity) {
             AppContext.Set<T>().Attach(entity);
-            AppContext.Entry(entity).State = EntityState.Modified;
+            //AppContext.Entry(entity).State = EntityState.Modified;
         }
     }
 }

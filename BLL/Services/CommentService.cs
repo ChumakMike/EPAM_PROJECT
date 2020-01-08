@@ -18,9 +18,9 @@ namespace BLL.Services {
             this.UnitOfWork = unitOfWork;
             ConfigurateMapper();
         }
-        public async Task Create(CommentDTO entity) {
+        public void Create(CommentDTO entity) {
             var comment = mapper.Map<Comment>(entity);
-            await UnitOfWork.CommentRepository.Create(comment);
+            UnitOfWork.CommentRepository.Create(comment);
             UnitOfWork.SaveChanges();
         }
 

@@ -19,9 +19,9 @@ namespace BLL.Services {
             ConfigurateMapper();
         }
 
-        public async Task Create(ArticleDTO entity) {
+        public void Create(ArticleDTO entity) {
             var article = mapper.Map<Article>(entity);
-            await UnitOfWork.ArticleRepository.Create(article);
+            UnitOfWork.ArticleRepository.Create(article);
             UnitOfWork.SaveChanges();
         }
 
