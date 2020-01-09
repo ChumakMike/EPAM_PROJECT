@@ -10,15 +10,19 @@ namespace DAL.UnitOfWork {
     public class UnitOfWork : IUnitOfWork {
 
         private AppContext appContext;
+
         private ArticleRepository articleRepository;
         private BlogRepository blogRepository;
         private CommentRepository commentRepository;
+        private UserRepository userRepository;
 
         public IArticleRepository ArticleRepository => articleRepository = articleRepository ?? new ArticleRepository(appContext);
 
         public IBlogRepository BlogRepository => blogRepository = blogRepository ?? new BlogRepository(appContext);
 
         public ICommentRepository CommentRepository => commentRepository = commentRepository ?? new CommentRepository(appContext);
+
+        public IUserRepository UserRepository => userRepository = userRepository ?? new UserRepository();
 
         public void Dispose() {
             appContext.Dispose();

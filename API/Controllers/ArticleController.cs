@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using BLL.ModelsDTO;
 using BLL.Services;
+using BLL.Interfaces;
 
 namespace API.Controllers {
 
     [RoutePrefix("api/article")]
     public class ArticleController : ApiController {
-        private readonly ArticleService ArticleService;
+        private readonly IArticleService ArticleService;
 
         public ArticleController(ArticleService articleService) {
             this.ArticleService = articleService;

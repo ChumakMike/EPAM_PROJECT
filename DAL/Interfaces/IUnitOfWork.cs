@@ -9,6 +9,7 @@ namespace DAL.Interfaces {
         IArticleRepository ArticleRepository { get; }
         IBlogRepository BlogRepository { get; }
         ICommentRepository CommentRepository { get; }
+        IUserRepository UserRepository { get; }
         void SaveChanges();
     }
 }
