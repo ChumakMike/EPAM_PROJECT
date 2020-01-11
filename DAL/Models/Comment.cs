@@ -8,7 +8,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models {
     public class Comment {
-
         public Comment() { }
 
         [Key]

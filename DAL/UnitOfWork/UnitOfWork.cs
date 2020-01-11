@@ -3,29 +3,67 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DAL.Identity;
+using DAL.Models;
 using DAL.Interfaces;
 using DAL.Repositories;
+using DAL.DBContext;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace DAL.UnitOfWork {
+
     public class UnitOfWork : IUnitOfWork {
 
-        private AppContext appContext;
-
+        private ApplicationContext appContext;
         private ArticleRepository articleRepository;
         private BlogRepository blogRepository;
-        private CommentRepository commentRepository;
-        private UserRepository userRepository;
+        private AppUserManager userManager;
 
-        public IArticleRepository ArticleRepository => articleRepository = articleRepository ?? new ArticleRepository(appContext);
+        public UnitOfWork() {
+            appContext = new ApplicationContext();
+            articleRepository = new ArticleRepository(appContext);
+            blogRepository = new BlogRepository(appContext);
+            userManager = new AppUserManager(new UserStore<ApplicationUser>(appContext));
+        }
 
-        public IBlogRepository BlogRepository => blogRepository = blogRepository ?? new BlogRepository(appContext);
+        public IArticleRepository ArticleRepository {
+            get {
+                return articleRepository;
+            }
+        }
 
-        public ICommentRepository CommentRepository => commentRepository = commentRepository ?? new CommentRepository(appContext);
+        public IBlogRepository BlogRepository {
+            get {
+                return blogRepository;
+            }
+        }
 
-        public IUserRepository UserRepository => userRepository = userRepository ?? new UserRepository();
+        public AppUserManager AppUserManager {
+            get {
+                return userManager;
+            }
+        }
+
+        private bool disposed = false;
 
         public void Dispose() {
-            appContext.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing) {
+            if(!this.disposed) {
+                if(disposing) {
+                    articleRepository.Dispose();
+                    blogRepository.Dispose();
+                    userManager.Dispose();
+                }
+                this.disposed = true;
+            }
+        }
+
+        public async Task SaveAsync() {
+            await appContext.SaveChangesAsync();
         }
 
         public void SaveChanges() {

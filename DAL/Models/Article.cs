@@ -9,11 +9,7 @@ using System.Collections.ObjectModel;
 
 namespace DAL.Models {
     public class Article {
-
-        public Article() {
-            Comments = new Collection<Comment>();
-        }
-
+        
         [Key]
         public int ArticleId { get; set; }
 

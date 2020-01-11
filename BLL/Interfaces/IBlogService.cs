@@ -8,11 +8,9 @@ using BLL.ModelsDTO;
 namespace BLL.Interfaces {
     public interface IBlogService {
         BlogDTO GetById(int id);
-        Task<IEnumerable<BlogDTO>> GetAll();
+        IEnumerable<BlogDTO> GetAll();
         void Create(BlogDTO entity);
-        void Remove(int id);
+        void Remove(BlogDTO entity);
         void Update(BlogDTO entity);
-        Task<IEnumerable<BlogDTO>> GetAllWithArticles();
-        Task<BlogDTO> GetWithCommentsById(int id);
     }
 }

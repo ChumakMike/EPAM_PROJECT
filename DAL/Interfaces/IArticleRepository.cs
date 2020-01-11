@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using DAL.Models;
 
 namespace DAL.Interfaces {
-    public interface IArticleRepository : IRepository<Article> {
-        Task<IEnumerable<Article>> GetAllWithComments();
-        Task<Article> GetWithCommentsById();
+    public interface IArticleRepository : IDisposable {
+        Article GetById(int id);
+        IEnumerable<Article> GetAll();
+        void Create(Article entity);
+        void Remove(Article entity);
+        void Update(Article entity);
     }
 }

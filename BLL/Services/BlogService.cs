@@ -1,21 +1,24 @@
-﻿using BLL.Interfaces;
-using BLL.ModelsDTO;
-using DAL.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BLL.Interfaces;
+using BLL.ModelsDTO;
+using DAL.Interfaces;
+using DAL.UnitOfWork;
 using DAL.Models;
 using AutoMapper;
 
+
 namespace BLL.Services {
     public class BlogService : IBlogService {
+
         private IUnitOfWork UnitOfWork;
         private IMapper mapper;
 
-        public BlogService(IUnitOfWork unitOfWork) {
-            this.UnitOfWork = unitOfWork;
+        public BlogService() {
+            this.UnitOfWork = new UnitOfWork();
             ConfigurateMapper();
         }
 
@@ -25,29 +28,28 @@ namespace BLL.Services {
             UnitOfWork.SaveChanges();
         }
 
-        public async Task<IEnumerable<BlogDTO>> GetAll() {
-            return mapper.Map<IEnumerable<BlogDTO>>(await UnitOfWork.BlogRepository.GetAll());
+        public IEnumerable<BlogDTO> GetAll() {
+            return mapper.Map<IEnumerable<BlogDTO>>(UnitOfWork.BlogRepository.GetAll());
         }
-        
+
         public BlogDTO GetById(int id) {
             return mapper.Map<BlogDTO>(UnitOfWork.BlogRepository.GetById(id));
         }
 
-        public void Remove(int id) {
-            UnitOfWork.BlogRepository.Remove(id);
+        public void Remove(BlogDTO entity) {
+            var existingBlog = GetById(entity.BlogId);
+            if (existingBlog == null) throw new NullReferenceException();
+            var blogToRemove = mapper.Map<BlogDTO, Blog>(entity);
+            UnitOfWork.BlogRepository.Remove(blogToRemove);
+            UnitOfWork.SaveChanges();
         }
 
         public void Update(BlogDTO entity) {
-            var blogToUpdate = mapper.Map<Blog>(entity);
+            var existingBlog = GetById(entity.BlogId);
+            if (existingBlog == null) throw new NullReferenceException();
+            var blogToUpdate = mapper.Map<BlogDTO, Blog>(entity);
             UnitOfWork.BlogRepository.Update(blogToUpdate);
-        }
-
-        public Task<IEnumerable<BlogDTO>> GetAllWithArticles() {
-            throw new NotImplementedException();
-        }
-
-        public Task<BlogDTO> GetWithCommentsById(int id) {
-            throw new NotImplementedException();
+            UnitOfWork.SaveChanges();
         }
 
         private void ConfigurateMapper() {

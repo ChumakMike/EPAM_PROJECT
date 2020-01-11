@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using System.ComponentModel.DataAnnotations;
 
-namespace API.Models {
+namespace WebApi.Models {
     public class SignInModel {
         [Required(AllowEmptyStrings = false)]
         public string UserName { get; set; }

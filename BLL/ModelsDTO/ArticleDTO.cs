@@ -13,7 +13,5 @@ namespace BLL.ModelsDTO {
 
         public int BlogRefId { get; set; }
         public BlogDTO BlogDTO { get; set; }
-
-        public virtual ICollection<CommentDTO> CommentDTOs { get; set; }
     }
 }

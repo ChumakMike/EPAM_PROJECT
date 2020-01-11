@@ -13,13 +13,6 @@ namespace DAL.Models {
             Articles = new Collection<Article>();
         }
 
-        public Blog(int blogId, string title, string description) {
-            BlogId = blogId;
-            Title = title;
-            Description = description;
-            Articles = new Collection<Article>();
-        }
-
         [Key]
         public int BlogId { get; set; }
 
