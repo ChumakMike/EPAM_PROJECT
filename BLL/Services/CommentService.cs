@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using BLL.Interfaces;
 using BLL.ModelsDTO;
 using DAL.Interfaces;
-using DAL.UnitOfWork;
 using DAL.Models;
 using AutoMapper;
+using BLL.Exceptions;
 
 namespace BLL.Services {
     public class CommentService : ICommentService {
@@ -16,8 +16,8 @@ namespace BLL.Services {
         private IUnitOfWork UnitOfWork;
         private IMapper mapper;
 
-        public CommentService() {
-            this.UnitOfWork = new UnitOfWork();
+        public CommentService(IUnitOfWork unitOfWork) {
+            this.UnitOfWork = unitOfWork;
             ConfigurateMapper();
         }
 
@@ -37,7 +37,7 @@ namespace BLL.Services {
 
         public void Remove(CommentDTO entity) {
             var existingComment = GetById(entity.CommentId);
-            if (existingComment == null) throw new NullReferenceException();
+            if (existingComment == null) throw new NoSuchEntityFoundException("Blog with such id does not exist! Nothing to remove!");
             var commentToRemove = mapper.Map<CommentDTO, Comment>(entity);
             UnitOfWork.CommentRepository.Remove(commentToRemove);
             UnitOfWork.SaveChanges();

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BLL.Interfaces;
 using BLL.ModelsDTO;
 using DAL.Interfaces;
-using DAL.UnitOfWork;
+using BLL.Exceptions;
 using DAL.Models;
 using AutoMapper;
 
@@ -16,8 +13,8 @@ namespace BLL.Services {
         private IUnitOfWork UnitOfWork;
         private IMapper mapper;
 
-        public ArticleService() {
-            this.UnitOfWork = new UnitOfWork();
+        public ArticleService(IUnitOfWork unitOfWork) {
+            this.UnitOfWork = unitOfWork;
             ConfigurateMapper();
         }
 
@@ -42,16 +39,15 @@ namespace BLL.Services {
 
         public void Remove(ArticleDTO entity) {
             var existingArticle = GetById(entity.ArticleId);
-            if (existingArticle == null) throw new NullReferenceException();
+            if (existingArticle == null) throw new NoSuchEntityFoundException("Article with such id does not exist! Nothing to remove!");
             var articleToRemove = mapper.Map<ArticleDTO, Article>(entity);
             UnitOfWork.ArticleRepository.Remove(articleToRemove);
             UnitOfWork.SaveChanges();
-
         }
 
         public void Update(ArticleDTO entity) {
             var existingArticle = GetById(entity.ArticleId);
-            if (existingArticle == null) throw new NullReferenceException();
+            if (existingArticle == null) throw new NoSuchEntityFoundException("Article with such id does not exist! Nothing to update!");
             var articleToUpdate = mapper.Map<ArticleDTO, Article>(entity);
             UnitOfWork.ArticleRepository.Update(articleToUpdate);
             UnitOfWork.SaveChanges();

@@ -10,7 +10,8 @@ using DAL.UnitOfWork;
 using DAL.Models;
 using Microsoft.AspNet.Identity;
 using AutoMapper;
-    
+using BLL.Exceptions;
+
 namespace BLL.Services {
 
     public class UserService : IUserService {
@@ -22,7 +23,7 @@ namespace BLL.Services {
 
         public UserService() {
             this.UnitOfWork = new UnitOfWork();
-            this.BlogService = new BlogService();
+            this.BlogService = new BlogService(UnitOfWork);
             ConfigurateMapper();
         }
 
@@ -43,7 +44,7 @@ namespace BLL.Services {
                 ApplicationUser userToCreate = new ApplicationUser { Email = userDTO.Email, UserName = userDTO.UserName, BlogRefId = createdBlog.BlogId };
                 var resultOfCreation = await UnitOfWork.AppUserManager.CreateAsync(userToCreate, userDTO.Password);
 
-                if (resultOfCreation.Errors.Count() > 0) throw new Exception();
+                if (resultOfCreation.Errors.Count() > 0) throw new CreatingErrorException(resultOfCreation.Errors.ToString());
                 await UnitOfWork.SaveAsync();
             }
         }
@@ -58,6 +59,7 @@ namespace BLL.Services {
 
         public UserDTO GetUserById(string id) {
             ApplicationUser existingUser = UnitOfWork.AppUserManager.FindById(id);
+            if (existingUser == null) throw new NoSuchEntityFoundException("No User with such id!");
             return createNewUserDTO(existingUser);
         }
 
@@ -70,7 +72,7 @@ namespace BLL.Services {
 
         public void Update(UserDTO userDTO) {
             var existingUser = UnitOfWork.AppUserManager.FindById(userDTO.Id);
-            if (existingUser == null) throw new NullReferenceException();
+            if (existingUser == null) throw new NoSuchEntityFoundException("No User with such id!");
             var userToUpdate = mapper.Map<UserDTO, ApplicationUser>(userDTO);
             UnitOfWork.AppUserManager.Update(userToUpdate);
             UnitOfWork.SaveChanges();

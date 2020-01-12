@@ -9,7 +9,7 @@ using DAL.Interfaces;
 using DAL.UnitOfWork;
 using DAL.Models;
 using AutoMapper;
-
+using BLL.Exceptions;
 
 namespace BLL.Services {
     public class BlogService : IBlogService {
@@ -17,8 +17,8 @@ namespace BLL.Services {
         private IUnitOfWork UnitOfWork;
         private IMapper mapper;
 
-        public BlogService() {
-            this.UnitOfWork = new UnitOfWork();
+        public BlogService(IUnitOfWork unitOfWork) {
+            this.UnitOfWork = unitOfWork;
             ConfigurateMapper();
         }
 
@@ -38,7 +38,7 @@ namespace BLL.Services {
 
         public void Remove(BlogDTO entity) {
             var existingBlog = GetById(entity.BlogId);
-            if (existingBlog == null) throw new NullReferenceException();
+            if (existingBlog == null) throw new NoSuchEntityFoundException("Blog with such id does not exist! Nothing to remove!");
             var blogToRemove = mapper.Map<BlogDTO, Blog>(entity);
             UnitOfWork.BlogRepository.Remove(blogToRemove);
             UnitOfWork.SaveChanges();
@@ -46,7 +46,7 @@ namespace BLL.Services {
 
         public void Update(BlogDTO entity) {
             var existingBlog = GetById(entity.BlogId);
-            if (existingBlog == null) throw new NullReferenceException();
+            if (existingBlog == null) throw new NoSuchEntityFoundException("Blog with such id does not exist! Nothing to update!");
             var blogToUpdate = mapper.Map<BlogDTO, Blog>(entity);
             UnitOfWork.BlogRepository.Update(blogToUpdate);
             UnitOfWork.SaveChanges();

@@ -9,12 +9,24 @@ using System.Threading.Tasks;
 using System.Web;
 
 namespace WebApi.Providers {
+
+    /// <summary></summary>
     public class AuthServProvider : OAuthAuthorizationServerProvider {
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// /// <param name="context"></param>
+        /// <returns></returns>
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context) {
             await Task.Run(() => context.Validated());
         }
 
+        /// <summary>
+        /// Getting claims for user, who enters the system
+        /// </summary>
+        /// /// <param name="context"></param>
+        /// <returns></returns>
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context) {
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
@@ -31,7 +43,6 @@ namespace WebApi.Providers {
             identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
             //identity.AddClaim(new Claim(ClaimTypes.Role, ));
             context.Validated(identity);
-
         }
 
     }
