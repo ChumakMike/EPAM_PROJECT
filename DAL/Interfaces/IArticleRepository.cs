@@ -12,5 +12,6 @@ namespace DAL.Interfaces {
         void Create(Article entity);
         void Remove(Article entity);
         void Update(Article entity);
+        IEnumerable<Article> GetByBlogId(int BlogId);
     }
 }

@@ -53,5 +53,9 @@ namespace DAL.Repositories {
         public void Dispose() {
             appContext.Dispose();
         }
+
+        public IEnumerable<Article> GetByBlogId(int BlogId) {
+            return appContext.Articles.Where(x => x.BlogRefId == BlogId);
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace BLL.Interfaces {
         void Create(ArticleDTO entity);
         void Remove(ArticleDTO entity);
         void Update(ArticleDTO entity);
+        IEnumerable<ArticleDTO> GetByBlogId(int BlogId);
     }
 }

@@ -10,7 +10,7 @@ using DAL.UnitOfWork;
 using DAL.Models;
 using Microsoft.AspNet.Identity;
 using AutoMapper;
-
+    
 namespace BLL.Services {
 
     public class UserService : IUserService {
@@ -18,8 +18,11 @@ namespace BLL.Services {
         private IUnitOfWork UnitOfWork;
         private IMapper mapper;
 
+        private IBlogService BlogService;
+
         public UserService() {
             this.UnitOfWork = new UnitOfWork();
+            this.BlogService = new BlogService();
             ConfigurateMapper();
         }
 
@@ -31,7 +34,13 @@ namespace BLL.Services {
         public async Task Create(UserDTO userDTO) {
             ApplicationUser existingUser = await UnitOfWork.AppUserManager.FindByEmailAsync(userDTO.Email);
             if(existingUser == null) {
-                ApplicationUser userToCreate = new ApplicationUser { Email = userDTO.Email, UserName = userDTO.UserName, BlogRefId = userDTO.BlogRefId };
+
+                BlogDTO defaultBlogToCreate = new BlogDTO { Title = "Create new blog title", Description = "Create new description" };
+                BlogService.Create(defaultBlogToCreate);
+
+                BlogDTO createdBlog = BlogService.GetAll().Last();
+
+                ApplicationUser userToCreate = new ApplicationUser { Email = userDTO.Email, UserName = userDTO.UserName, BlogRefId = createdBlog.BlogId };
                 var resultOfCreation = await UnitOfWork.AppUserManager.CreateAsync(userToCreate, userDTO.Password);
 
                 if (resultOfCreation.Errors.Count() > 0) throw new Exception();

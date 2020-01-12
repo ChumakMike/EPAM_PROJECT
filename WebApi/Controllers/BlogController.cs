@@ -14,9 +14,11 @@ namespace WebApi.Controllers {
     [Authorize]
     public class BlogController : ApiController {
         private readonly IBlogService blogService;
+        private readonly IArticleService articleService;
 
         public BlogController() {
             this.blogService = new BlogService();
+            this.articleService = new ArticleService();
         }
 
         [HttpGet]
@@ -29,6 +31,7 @@ namespace WebApi.Controllers {
         [Route("{id}")]
         public IHttpActionResult GetBlogById(int id) {
             BlogDTO resultBlog = blogService.GetById(id);
+            resultBlog.ArticleDTOs = articleService.GetByBlogId(id).ToList();
             return Ok(resultBlog);
         }
 

@@ -12,6 +12,7 @@ namespace DAL.Interfaces {
         IArticleRepository ArticleRepository { get; }
         IBlogRepository BlogRepository { get; }
         AppUserManager AppUserManager { get; }
+        ICommentRepository CommentRepository { get; }
         void SaveChanges();
         Task SaveAsync();
     }

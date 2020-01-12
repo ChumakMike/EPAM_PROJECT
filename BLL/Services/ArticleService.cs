@@ -32,6 +32,10 @@ namespace BLL.Services {
             return mapper.Map<IEnumerable<ArticleDTO>>(UnitOfWork.ArticleRepository.GetAll());
         }
 
+        public IEnumerable<ArticleDTO> GetByBlogId(int BlogId) {
+            return mapper.Map<IEnumerable<ArticleDTO>>(UnitOfWork.ArticleRepository.GetByBlogId(BlogId));
+        }
+
         public ArticleDTO GetById(int id) {
             return mapper.Map<ArticleDTO>(UnitOfWork.ArticleRepository.GetById(id));
         }

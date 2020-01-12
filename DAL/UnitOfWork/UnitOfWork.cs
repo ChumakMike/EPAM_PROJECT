@@ -17,13 +17,16 @@ namespace DAL.UnitOfWork {
         private ApplicationContext appContext;
         private ArticleRepository articleRepository;
         private BlogRepository blogRepository;
+        private CommentRepository commentRepository;
         private AppUserManager userManager;
+
 
         public UnitOfWork() {
             appContext = new ApplicationContext();
             articleRepository = new ArticleRepository(appContext);
             blogRepository = new BlogRepository(appContext);
             userManager = new AppUserManager(new UserStore<ApplicationUser>(appContext));
+            commentRepository = new CommentRepository(appContext);
         }
 
         public IArticleRepository ArticleRepository {
@@ -41,6 +44,12 @@ namespace DAL.UnitOfWork {
         public AppUserManager AppUserManager {
             get {
                 return userManager;
+            }
+        }
+
+        public ICommentRepository CommentRepository {
+            get {
+                return commentRepository;
             }
         }
 
