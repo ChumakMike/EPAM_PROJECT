@@ -28,7 +28,7 @@ namespace WebApi {
         public void ConfigureOAuth(IAppBuilder app) {
             OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions() {
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/login"),
+                TokenEndpointPath = new PathString("/api/login"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
                 Provider = new AuthServProvider()
             };
